@@ -19,7 +19,9 @@ async function dbConnect() {
 const urlSchema = new mongoose.Schema({
   originalUrl: { type: String, required: true },
   shortUrl: { type: String, required: true, unique: true },
-});
+  clicks: { type: Number, default: 0 },
+  lastClickedAt: { type: Date },
+}, { timestamps: true });
 
 const Url = mongoose.models.Url || mongoose.model('Url', urlSchema);
 
@@ -35,6 +37,11 @@ export async function GET(
     if (!url) {
       return NextResponse.json({ message: 'URL not found' }, { status: 404 });
     }
+
+    await Url.updateOne(
+      { _id: url._id },
+      { $inc: { clicks: 1 }, $set: { lastClickedAt: new Date() } },
+    );
 
     return NextResponse.redirect(url.originalUrl);
   } catch (error) {

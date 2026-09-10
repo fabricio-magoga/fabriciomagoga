@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { z } from "zod";
+import { isValidAdminSession } from "@/lib/admin-auth";
 
 const mongoUri = process.env.MONGO_URI ?? "";
 
@@ -21,10 +22,15 @@ async function dbConnect() {
   return conn;
 }
 
-const urlSchema = new mongoose.Schema({
-  originalUrl: { type: String, required: true },
-  shortUrl: { type: String, required: true, unique: true },
-});
+const urlSchema = new mongoose.Schema(
+  {
+    originalUrl: { type: String, required: true },
+    shortUrl: { type: String, required: true, unique: true },
+    clicks: { type: Number, default: 0 },
+    lastClickedAt: { type: Date },
+  },
+  { timestamps: true },
+);
 
 const Url = mongoose.models.Url || mongoose.model("Url", urlSchema);
 
@@ -82,6 +88,77 @@ const urlValidationSchema = z.object({
       return protocol === "http:" || protocol === "https:";
     }, "A URL deve usar HTTP ou HTTPS"),
 });
+
+const deleteUrlSchema = z.object({
+  shortUrl: z.string().min(1).max(32),
+});
+
+function getAdminSessionToken(request: Request) {
+  return request.headers
+    .get("cookie")
+    ?.match(/(?:^|;\s*)admin_session=([^;]+)/)?.[1];
+}
+
+export async function GET(request: Request) {
+  try {
+    if (!(await isValidAdminSession(getAdminSessionToken(request)))) {
+      return NextResponse.json({ message: "Não autorizado" }, { status: 401 });
+    }
+
+    await dbConnect();
+    const urls = await Url.find()
+      .sort({ _id: -1 })
+      .select("originalUrl shortUrl clicks lastClickedAt createdAt")
+      .lean();
+    const totalClicks = urls.reduce(
+      (total: number, url: { clicks?: number }) => total + (url.clicks ?? 0),
+      0,
+    );
+    const urlsWithLegacyDates = urls.map((url) => ({
+      ...url,
+      createdAt: url.createdAt ?? url._id.getTimestamp(),
+    }));
+
+    return NextResponse.json({
+      totalLinks: urlsWithLegacyDates.length,
+      totalClicks,
+      urls: urlsWithLegacyDates,
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Ocorreu um erro interno no servidor" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    if (!(await isValidAdminSession(getAdminSessionToken(request)))) {
+      return NextResponse.json({ message: "Não autorizado" }, { status: 401 });
+    }
+
+    const { shortUrl } = deleteUrlSchema.parse(await request.json());
+    await dbConnect();
+    const result = await Url.deleteOne({ shortUrl });
+
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ message: "Link não encontrado" }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ message: "Link inválido" }, { status: 400 });
+    }
+    console.error(error);
+    return NextResponse.json(
+      { message: "Ocorreu um erro interno no servidor" },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   try {
