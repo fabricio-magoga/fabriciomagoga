@@ -67,7 +67,16 @@ function ShapeSelector({
   onShapeChange: (shape: string) => void;
   isDarkMode: boolean;
 }) {
-  const shapes = ["auto", "cat", "warp", "sphere", "ripple", "swirl", "wave"];
+  const shapes = [
+    "auto",
+    "cat",
+    "warp",
+    "sphere",
+    "ripple",
+    "swirl",
+    "wave",
+    "disabled",
+  ];
 
   return (
     <Select value={currentShape} onValueChange={onShapeChange}>
@@ -81,7 +90,9 @@ function ShapeSelector({
           <SelectItem key={shape} value={shape}>
             {shape === "auto"
               ? "Auto"
-              : shape.charAt(0).toUpperCase() + shape.slice(1)}
+              : shape === "disabled"
+                ? "Disabled"
+                : shape.charAt(0).toUpperCase() + shape.slice(1)}
           </SelectItem>
         ))}
       </SelectContent>
@@ -188,11 +199,15 @@ export default function ResumePage() {
 
   const [shapeIndex, setShapeIndex] = useState(0);
 
-  const SHAPES = ["cat", "warp", "sphere", "ripple", "swirl"]; // Lista de shapes disponíveis
+  const SHAPES = ["cat", "warp", "sphere", "ripple", "swirl"];
 
   // Determina qual shape deve ser exibido
   const displayShape =
-    currentShape === "auto" ? SHAPES[shapeIndex] : currentShape;
+    currentShape === "disabled"
+      ? "sphere"
+      : currentShape === "auto"
+        ? SHAPES[shapeIndex]
+        : currentShape;
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -232,13 +247,11 @@ export default function ResumePage() {
         isHydrated ? "opacity-100" : "opacity-0"
       } ${isDarkMode ? "bg-black" : "bg-white"}`}
     >
-      {/* Dithering shader panel - top on mobile, right side on desktop */}
-      {/* Adicionado overflow-hidden para garantir que a animação não vaze */}
+
       <div className="w-full h-[30vh] md:h-auto md:w-1/2 md:order-2 relative shrink-0">
-        {/* 4. Envolvendo com AnimatePresence e motion.div */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={displayShape} // A chave muda -> React remonta -> Animação acontece
+            key={displayShape} 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -251,14 +264,14 @@ export default function ResumePage() {
               colorFront={
                 isDarkMode ? "hsl(320, 100%, 70%)" : "hsl(220, 81%, 50%)"
               }
-              shape={displayShape as any} // Shape dinâmico
+              shape={displayShape as any}
               type="4x4"
               pxSize={1}
               offsetX={0}
               offsetY={0}
               scale={0.8}
               rotation={0}
-              speed={0.2}
+              speed={currentShape === "disabled" ? 0 : 0.2}
             />
           </motion.div>
         </AnimatePresence>
