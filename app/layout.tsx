@@ -20,11 +20,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Fabricio Magoga - Software Engineer",
+    default: "Fabrício Magoga",
     template: "%s | Fabricio Magoga",
   },
   description:
-    "Software Engineer portfolio showcasing projects, skills, and experience in development, software engineering, and technology.",
+    "Fabrício Magoga portfolio showcasing experience, education ,projects and software engineering, cybersecurity and technology skills.",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
