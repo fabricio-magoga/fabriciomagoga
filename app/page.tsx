@@ -146,22 +146,22 @@ function SectionEntry({
 function FooterLinks() {
   const links = [
     {
+      label: "Linkedin",
+      href: "https://www.linkedin.com/in/fabriciomagoga/",
+      external: true,
+    },
+    {
       label: "Github",
       href: "https://github.com/fabricio-magoga",
       external: true,
     },
     {
       label: "Email",
-      href: "mailto:contato.fabriciomagoga@gmail.com",
+      href: "mailto:contato@fabriciomagoga.com.br",
       external: true,
     },
     {
-      label: "Linkedin",
-      href: "https://www.linkedin.com/in/fabriciomagoga/",
-      external: true,
-    },
-    {
-      label: "Download CV",
+      label: "Resume",
       href: "/CV_FABRICIO_MAGOGA.pdf",
       external: false,
     },
@@ -247,11 +247,10 @@ export default function ResumePage() {
         isHydrated ? "opacity-100" : "opacity-0"
       } ${isDarkMode ? "bg-black" : "bg-white"}`}
     >
-
       <div className="w-full h-[30vh] md:h-auto md:w-1/2 md:order-2 relative shrink-0">
         <AnimatePresence mode="wait">
           <motion.div
-            key={displayShape} 
+            key={displayShape}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -361,11 +360,11 @@ export default function ResumePage() {
                 title="Websocket Chat"
                 href="https://magoga-chat.vercel.app/"
               /> */}
-              <SectionEntry
+              {/* <SectionEntry
                 date="2026"
                 title="Portfolio (this website)"
                 href="https://www.fabriciomagoga.com.br/"
-              />
+              /> */}
             </section>
           </div>
         </div>
