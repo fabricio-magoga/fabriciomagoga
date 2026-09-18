@@ -105,17 +105,21 @@ function SectionEntry({
   title,
   org,
   href,
+  target,
+  rel,
 }: {
   date: string;
   title: string;
   org?: string;
   href?: string;
+  target?: string;
+  rel?: string;
 }) {
   const titleContent = href ? (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={target || "_blank"}
+      rel={rel || "noopener noreferrer"}
       className="hover:underline"
     >
       {title}
@@ -286,7 +290,13 @@ export default function ResumePage() {
           {/* Top bar with site name and theme toggle */}
           <div className="flex items-center justify-between mb-8 sm:mb-12">
             <h1 className="text-sm sm:text-lg font-normal">
-              fabriciomagoga.com.br
+              <Link
+                href="/"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                fabriciomagoga.com.br
+              </Link>
             </h1>
             <div className="flex items-center gap-3">
               <ShapeSelector
@@ -304,7 +314,14 @@ export default function ResumePage() {
           {/* Name and title */}
           <header className="mb-8 sm:mb-12">
             <h2 className="text-base sm:text-lg font-normal text-balance">
-              FABRICIO MAGOGA
+              <Link
+                href="https://www.google.com/search?q=Fabrício Magoga"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                FABRÍCIO MAGOGA
+              </Link>
             </h2>
             <h3 className="text-base sm:text-lg font-normal opacity-80">
               SOFTWARE ENGINEER
@@ -334,18 +351,27 @@ export default function ResumePage() {
               </h4>
               <SectionEntry
                 date="2025 → 2028"
-                title="Software Engineering"
+                title="Engenharia de Software"
                 org="FIAP"
+                href="https://www.fiap.com.br/graduacao/bacharelado/engenharia-de-software/"
+                target="_blank"
+                rel="noopener noreferrer"
               />
               <SectionEntry
                 date="2025 → 2028"
-                title="Cybersecurity"
+                title="Defesa Cibernética"
                 org="FATEC JD"
+                href="https://fatecjd.edu.br/site/defesa-cibernetica/"
+                target="_blank"
+                rel="noopener noreferrer"
               />
               <SectionEntry
                 date="2022 → 2024"
-                title="IT Technical High School"
+                title="Técnico em Informática"
                 org="Escolas Anchieta"
+                href="https://escolas.anchieta.br/medio-e-informatica/"
+                target="_blank"
+                rel="noopener noreferrer"
               />
             </section>
 
@@ -355,16 +381,6 @@ export default function ResumePage() {
                 Projects
               </h4>
               <SectionEntry date="2025" title="URL Shortener" href="/url" />
-              {/* <SectionEntry
-                date="2025"
-                title="Websocket Chat"
-                href="https://magoga-chat.vercel.app/"
-              /> */}
-              {/* <SectionEntry
-                date="2026"
-                title="Portfolio (this website)"
-                href="https://www.fabriciomagoga.com.br/"
-              /> */}
             </section>
           </div>
         </div>
