@@ -85,7 +85,9 @@ function ShapeSelector({
       >
         <SelectValue />
       </SelectTrigger>
-      <SelectContent className="bg-black border-none text-white">
+      <SelectContent
+        className={`${isDarkMode ? "bg-black, text-white" : "bg-white, text-black"} border-none`}
+      >
         {shapes.map((shape) => (
           <SelectItem key={shape} value={shape}>
             {shape === "auto"
