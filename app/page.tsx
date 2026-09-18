@@ -288,7 +288,7 @@ export default function ResumePage() {
           isDarkMode ? "bg-black text-white" : "bg-white text-black"
         }`}
       >
-        <div className="flex-1 p-5 sm:p-8">
+        <div className="flex-1 pt-5 pl-5 sm:pt-8 sm:pl-8 pr-5 sm:pr-8 flex flex-col">
           {/* Top bar with site name and theme toggle */}
           <div className="flex items-center justify-between mb-8 sm:mb-12">
             <h1 className="text-sm sm:text-lg font-normal">
@@ -388,7 +388,7 @@ export default function ResumePage() {
         </div>
 
         {/* Footer Links - flows naturally instead of absolute positioning */}
-        <footer className="shrink-0 p-5 sm:p-8 pt-0">
+        <footer className="shrink-0 px-5 sm:px-8 py-4 sm:py-6">
           <FooterLinks />
         </footer>
       </div>
