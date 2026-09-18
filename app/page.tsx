@@ -369,7 +369,7 @@ export default function ResumePage() {
                 date="2022 → 2024"
                 title="Técnico em Informática"
                 org="Escolas Anchieta"
-                href="https://escolas.anchieta.br/medio-e-informatica/"
+                href="https://tecnicos.anchieta.br/cursos-tecnicos/tecnico-em-informatica/"
                 target="_blank"
                 rel="noopener noreferrer"
               />
