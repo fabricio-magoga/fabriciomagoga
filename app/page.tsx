@@ -168,7 +168,7 @@ function FooterLinks() {
     },
     {
       label: "Resume",
-      href: "/CV_FABRICIO_MAGOGA.pdf",
+      href: "/FABRICIO_MAGOGA_CURRICULO.pdf",
       external: false,
     },
   ];
